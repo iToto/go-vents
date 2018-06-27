@@ -1,0 +1,55 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "W+IoIME5mgWjwU+dOlh3DZEZEN4=",
+			"path": "github.com/go-sql-driver/mysql",
+			"revision": "749ddf1598b47e3cd909414bda735fe790ef3d30",
+			"revisionTime": "2018-06-18T11:59:01Z"
+		},
+		{
+			"checksumSHA1": "iIUYZyoanCQQTUaWsu8b+iOSPt4=",
+			"path": "github.com/gorilla/context",
+			"revision": "215affda49addc4c8ef7e2534915df2c8c35c6cd",
+			"revisionTime": "2014-12-17T16:02:51Z"
+		},
+		{
+			"checksumSHA1": "H5f7qNqZl8N83s9cyC7Q1eWgAtI=",
+			"path": "github.com/gorilla/mux",
+			"revision": "9fa818a44c2bf1396a17f9d5a3c0f6dd39d2ff8e",
+			"revisionTime": "2016-06-05T23:35:21Z"
+		},
+		{
+			"checksumSHA1": "5I0G+0o3xHUQ53jlq70Ujrw0d2A=",
+			"path": "github.com/jmoiron/sqlx",
+			"revision": "7396209bbeada6a4fcc28aa9408f89b2e71cac39",
+			"revisionTime": "2016-07-29T03:07:26Z"
+		},
+		{
+			"checksumSHA1": "NJHTyLwheqVk7+syzj9UN7p1dKs=",
+			"path": "github.com/jmoiron/sqlx/reflectx",
+			"revision": "7396209bbeada6a4fcc28aa9408f89b2e71cac39",
+			"revisionTime": "2016-07-29T03:07:26Z"
+		},
+		{
+			"checksumSHA1": "r0TNua5yJKMA8eHlGP89RwrKD2U=",
+			"path": "github.com/lib/pq",
+			"revision": "55196ec83d60d789e27b2627549bf00974a70084",
+			"revisionTime": "2016-03-28T15:34:59Z"
+		},
+		{
+			"checksumSHA1": "xppHi82MLqVx1eyQmbhTesAEjx8=",
+			"path": "github.com/lib/pq/oid",
+			"revision": "55196ec83d60d789e27b2627549bf00974a70084",
+			"revisionTime": "2016-03-28T15:34:59Z"
+		},
+		{
+			"checksumSHA1": "eDQ6f1EsNf+frcRO/9XukSEchm8=",
+			"path": "github.com/satori/go.uuid",
+			"revision": "36e9d2ebbde5e3f13ab2e25625fd453271d6522e",
+			"revisionTime": "2018-01-03T17:44:51Z"
+		}
+	],
+	"rootPath": "github.com/iToto/go-vents"
+}
