@@ -1,25 +1,27 @@
 package main
 
 import (
-	"database/sql"
-	// "encoding/json"
+	"encoding/json"
+
 	"fmt"
-	_ "github.com/lib/pq"
 	"log"
 	"net/http"
 	"os"
-	"strconv"
+
+	"github.com/iToto/go-vents/service"
+	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 
 	"github.com/gorilla/mux"
 )
 
-var db *sql.DB
+var db *sqlx.DB
 
 type Foo struct {
 	Bar string
 }
 
-func DBConnection() *sql.DB {
+func DBConnection() *sqlx.DB {
 	dbURL := os.Getenv("DATABASE_URL")
 
 	if dbURL == "" {
@@ -28,7 +30,7 @@ func DBConnection() *sql.DB {
 		fmt.Println("Connected to database: " + dbURL)
 	}
 
-	db, err := sql.Open("postgres", dbURL)
+	db, err := sqlx.Open("postgres", dbURL)
 
 	if err != nil {
 		log.Fatal(err)
@@ -50,39 +52,44 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/", Index)
-	router.HandleFunc("/foo", FooIndex)
-	router.HandleFunc("/foo/{id}", GetFoo).Methods("GET")
-	router.HandleFunc("/foo/{id}", PostFoo).Methods("POST")
+	router.HandleFunc("/events/{id}", GetEvent).Methods("GET")
+	// router.HandleFunc("/foo/{id}", PostFoo).Methods("POST")
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello there and welcome to your service!")
+	fmt.Fprintln(w, "Hello there and welcome to your service! 111")
 }
 
-func FooIndex(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	// jsonString, _ := json.Marshal(foos)
-	jsonString := []byte(`{"foo":"bar"}`)
-
-	w.Write(jsonString)
-}
-
-func GetFoo(w http.ResponseWriter, r *http.Request) {
+func GetEvent(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id, _ := strconv.ParseInt(vars["id"], 10, 0)
+	id := vars["id"]
+	eventService := service.NewEventService(db)
 
-	var foo string
-
-	err := db.QueryRow("SELECT * FROM foo WHERE id = $1", id).Scan(&foo)
+	event, err := eventService.Get(id)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf(
+			"error getting event with id: %s with error: %s",
+			id,
+			err.Error(),
+		)
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(``))
 	}
 
-	// fmt.Print("foo: ", foo)
-	fmt.Fprintln(w, "Foo show:", foo)
+	jstring, err := json.Marshal(event)
+	if err != nil {
+		log.Printf(
+			"error marshalling event to json with error: %s",
+			err.Error(),
+		)
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte(``))
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(jstring)
 }
 
 func PostFoo(w http.ResponseWriter, r *http.Request) {
