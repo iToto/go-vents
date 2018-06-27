@@ -3,13 +3,13 @@
 /**
  DROP TABLE IF EXISTS
 */
-DROP TABLE IF EXISTS events;
+DROP TABLE IF EXISTS public.events;
 
 /**
  CREATE TABLE
 */
 
-CREATE TABLE events
+CREATE TABLE public.events
 (
 id UUID UNIQUE ,
 name VARCHAR(255) UNIQUE ,
@@ -25,5 +25,5 @@ CONSTRAINT "events_pkey" PRIMARY KEY (id)
  ADD FOREIGN KEY
 */
 
-CREATE INDEX "events_id_idx" ON events(id);
-CREATE INDEX "events_name_idx" ON events(name);
+CREATE INDEX "events_id_idx" ON public.events(id);
+CREATE INDEX "events_name_idx" ON public.events(name);
