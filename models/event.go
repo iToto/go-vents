@@ -6,8 +6,8 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
-// Event is the definition of an event that we want to track
-type Event struct {
+// SetEvent is the definition of an event that we want to track
+type SetEvent struct {
 	ID         string          `json:"id,omitempty"`
 	Name       string          `json:"name,omitempty"`
 	Properties json.RawMessage `json:"properties,omitempty"`

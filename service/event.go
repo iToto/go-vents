@@ -23,8 +23,8 @@ func NewEventService(db *sqlx.DB) *EventService {
 }
 
 // Get will retrieve an event by its ID
-func (es EventService) Get(id string) (*models.Event, error) {
-	var event models.Event
+func (es EventService) Get(id string) (*models.SetEvent, error) {
+	var event models.SetEvent
 	query := "SELECT * FROM events WHERE id = $1"
 	err := es.db.Get(&event, query, id)
 
@@ -41,8 +41,8 @@ func (es EventService) Get(id string) (*models.Event, error) {
 }
 
 // List will list all events that exist in the SoR
-func (es EventService) List() ([]models.Event, error) {
-	var events []models.Event
+func (es EventService) List() ([]models.SetEvent, error) {
+	var events []models.SetEvent
 	query := "SELECT * FROM events"
 	rows, err := es.db.Query(query)
 	if err != nil {
@@ -56,7 +56,7 @@ func (es EventService) List() ([]models.Event, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var event models.Event
+		var event models.SetEvent
 		err := rows.Scan(&event)
 		if err != nil {
 			err = fmt.Errorf(
@@ -73,7 +73,7 @@ func (es EventService) List() ([]models.Event, error) {
 }
 
 // Create will create a new event in the SoR
-func (es EventService) Create(event models.Event) (*models.Event, error) {
+func (es EventService) Create(event models.SetEvent) (*models.SetEvent, error) {
 	// Populate UUID if not already set
 	if event.ID == "" {
 		event.ID = uuid.Must(uuid.NewV4()).String()
@@ -93,7 +93,7 @@ func (es EventService) Create(event models.Event) (*models.Event, error) {
 }
 
 // Update will update an existing event in the SoR
-func (es EventService) Update(event models.Event) (*models.Event, error) {
+func (es EventService) Update(event models.SetEvent) (*models.SetEvent, error) {
 	return nil, nil
 }
 
