@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/iToto/go-vents/models"
 	"github.com/jmoiron/sqlx"
@@ -94,10 +95,49 @@ func (es EventService) Create(event models.SetEvent) (*models.SetEvent, error) {
 
 // Update will update an existing event in the SoR
 func (es EventService) Update(event models.SetEvent) (*models.SetEvent, error) {
-	return nil, nil
+	// Check if event already exists
+	before, err := es.Get(event.ID)
+	if err != nil {
+		err = fmt.Errorf(
+			"Could not find existing event with error: %s",
+			err.Error(),
+		)
+	}
+
+	// Update event
+	before.Name = event.Name
+	before.Properties = event.Properties
+	before.CreatedOn = event.CreatedOn
+	before.UpdatedOn.Time = time.Now()
+
+	// Persist Updated Event
+	query := "UPDATE public.events SET name = :name, properties = :properties, created_on = :createdon, updated_on = :updatedon WHERE id = :id"
+	_, err = es.db.NamedExec(query, before)
+
+	if err != nil {
+		err = fmt.Errorf(
+			"Update event with error %s",
+			err.Error(),
+		)
+		return nil, err
+	}
+
+	return before, nil
 }
 
 // Delete will delete an existing event by its ID
-func (es EventService) Delete(id string) error {
-	return nil
+func (es EventService) Delete(event models.SetEvent) (*models.SetEvent, error) {
+	event.DeletedOn.Time = time.Now()
+	query := "UPDATE public.events SET deleted_on = :deletedon WHERE id = :id"
+	_, err := es.db.NamedExec(query, event)
+
+	if err != nil {
+		err = fmt.Errorf(
+			"Delete event with error %s",
+			err.Error(),
+		)
+		return nil, err
+	}
+
+	return &event, nil
 }
