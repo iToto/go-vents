@@ -109,11 +109,10 @@ func (es EventService) Update(event models.SetEvent) (*models.SetEvent, error) {
 	// Update event
 	before.Name = event.Name
 	before.Properties = event.Properties
-	before.CreatedOn = event.CreatedOn
 	before.UpdatedOn = null.NewTime(time.Now(), true)
 
 	// Persist Updated Event
-	query := "UPDATE public.events SET name = :name, properties = :properties, created_on = :created_on, updated_on = :updated_on WHERE id = :id"
+	query := "UPDATE public.events SET name = :name, properties = :properties, updated_on = :updated_on WHERE id = :id"
 	_, err = es.db.NamedExec(query, before)
 
 	if err != nil {
