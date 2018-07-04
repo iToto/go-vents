@@ -21,6 +21,12 @@
 			"revisionTime": "2016-06-05T23:35:21Z"
 		},
 		{
+			"checksumSHA1": "Cqsfq2OiMB2ZAu3+xk8053xIIlg=",
+			"path": "github.com/guregu/null",
+			"revision": "e81d6d8d57747b34d7c5fe0d20ebf57692f04ea9",
+			"revisionTime": "2017-12-14T16:32:13Z"
+		},
+		{
 			"checksumSHA1": "5I0G+0o3xHUQ53jlq70Ujrw0d2A=",
 			"path": "github.com/jmoiron/sqlx",
 			"revision": "7396209bbeada6a4fcc28aa9408f89b2e71cac39",
