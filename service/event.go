@@ -45,7 +45,7 @@ func (es EventService) Get(id string) (*models.SetEvent, error) {
 func (es EventService) List() ([]models.SetEvent, error) {
 	var events []models.SetEvent
 	query := "SELECT * FROM events"
-	rows, err := es.db.Query(query)
+	rows, err := es.db.Queryx(query)
 	if err != nil {
 		err = fmt.Errorf(
 			"could not select events with error %s",
@@ -58,7 +58,7 @@ func (es EventService) List() ([]models.SetEvent, error) {
 
 	for rows.Next() {
 		var event models.SetEvent
-		err := rows.Scan(&event)
+		err := rows.StructScan(&event)
 		if err != nil {
 			err = fmt.Errorf(
 				"could not parse results with error %s",
