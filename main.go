@@ -28,7 +28,7 @@ func DBConnection() *sqlx.DB {
 	if dbURL == "" {
 		log.Fatal("$DATABASE_URL environment variable must be set")
 	} else {
-		fmt.Println("Connected to database: " + dbURL)
+		fmt.Println("DB Connection Estabished!")
 	}
 
 	db, err := sqlx.Open("postgres", dbURL)
