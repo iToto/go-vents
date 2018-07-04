@@ -45,7 +45,7 @@ func (es EventService) Get(id string) (*models.SetEvent, error) {
 // List will list all events that exist in the SoR
 func (es EventService) List() ([]models.SetEvent, error) {
 	var events []models.SetEvent
-	query := "SELECT * FROM events"
+	query := "SELECT * FROM events WHERE deleted_on IS NULL"
 	rows, err := es.db.Queryx(query)
 	if err != nil {
 		err = fmt.Errorf(
