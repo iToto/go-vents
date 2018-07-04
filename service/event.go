@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/guregu/null"
 	"github.com/iToto/go-vents/models"
 	"github.com/jmoiron/sqlx"
 	"github.com/satori/go.uuid"
@@ -79,8 +80,9 @@ func (es EventService) Create(event models.SetEvent) (*models.SetEvent, error) {
 	if event.ID == "" {
 		event.ID = uuid.Must(uuid.NewV4()).String()
 	}
-	query := "INSERT INTO public.events (id, name, properties, created_on) VALUES (:id, :name, :properties, :createdon)"
-	_, err := es.db.NamedExec(query, &event)
+	event.CreatedOn = null.NewTime(time.Now(), true)
+	query := "INSERT INTO public.events (id, name, properties, created_on) VALUES (:id, :name, :properties, :created_on)"
+	_, err := es.db.NamedQuery(query, &event)
 
 	if err != nil {
 		err = fmt.Errorf(
@@ -108,10 +110,10 @@ func (es EventService) Update(event models.SetEvent) (*models.SetEvent, error) {
 	before.Name = event.Name
 	before.Properties = event.Properties
 	before.CreatedOn = event.CreatedOn
-	before.UpdatedOn.Time = time.Now()
+	before.UpdatedOn = null.NewTime(time.Now(), true)
 
 	// Persist Updated Event
-	query := "UPDATE public.events SET name = :name, properties = :properties, created_on = :createdon, updated_on = :updatedon WHERE id = :id"
+	query := "UPDATE public.events SET name = :name, properties = :properties, created_on = :created_on, updated_on = :updated_on WHERE id = :id"
 	_, err = es.db.NamedExec(query, before)
 
 	if err != nil {
@@ -125,11 +127,11 @@ func (es EventService) Update(event models.SetEvent) (*models.SetEvent, error) {
 	return before, nil
 }
 
-// Delete will delete an existing event by its ID
+// Delete will delete n existing event by its ID
 func (es EventService) Delete(event models.SetEvent) (*models.SetEvent, error) {
-	event.DeletedOn.Time = time.Now()
-	query := "UPDATE public.events SET deleted_on = :deletedon WHERE id = :id"
-	_, err := es.db.NamedExec(query, event)
+	event.DeletedOn = null.NewTime(time.Now(), true)
+	query := "UPDATE public.events SET deleted_on = :deleted_on WHERE id = :id"
+	_, err := es.db.NamedQuery(query, event)
 
 	if err != nil {
 		err = fmt.Errorf(
