@@ -15,3 +15,10 @@ type SetEvent struct {
 	UpdatedOn  null.Time       `db:"updated_on" json:"updated_on,omitempty"`
 	DeletedOn  null.Time       `db:"deleted_on" json:"deleted_on,omitempty"`
 }
+
+type TrackEvent struct {
+	Name       string          `db:"name" json:"name,omitempty"`
+	Properties json.RawMessage `db:"properties" json:"properties,omitempty"`
+	CreatedOn  null.Time       `db:"created_on" json:"created_on,omitempty"`
+	TrackedOn  null.Time       `db:"tracked_on" json:"tracked_on,omitempty"`
+}
