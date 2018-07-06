@@ -58,6 +58,7 @@ func main() {
 	router.HandleFunc("/events/{id}", GetEvent).Methods("GET")
 	router.HandleFunc("/events", UpdateEvent).Methods("PUT")
 	router.HandleFunc("/events/{id}", DeleteEvent).Methods("DELETE")
+	router.HandleFunc("/track", TrackEvent).Methods("POST")
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
@@ -202,6 +203,38 @@ func DeleteEvent(w http.ResponseWriter, r *http.Request) {
 	sendJSON(deletedEvent, w)
 }
 
+// TrackEvent will track an event
+func TrackEvent(w http.ResponseWriter, r *http.Request) {
+	var event models.TrackEvent
+
+	log.Println("Track Event Requested")
+
+	eventService := service.NewEventService(db)
+	trackService := service.NewTrackService(eventService, db)
+
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&event)
+
+	if err != nil {
+		log.Printf(
+			"error parsing payload with error: %s",
+			err.Error(),
+		)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(``))
+	}
+
+	err = trackService.TrackEvent(event)
+
+	if err != nil {
+		log.Printf("Error tracking event: %s", err.Error())
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(``))
+
+}
+
 func sendJSON(payload interface{}, w http.ResponseWriter) {
 	jstring, err := json.Marshal(payload)
 	if err != nil {
@@ -214,5 +247,6 @@ func sendJSON(payload interface{}, w http.ResponseWriter) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	w.Write(jstring)
 }
