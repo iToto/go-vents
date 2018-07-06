@@ -42,6 +42,24 @@ func (es EventService) Get(id string) (*models.SetEvent, error) {
 	return &event, nil
 }
 
+// GetByName will retrieve an event by its Name
+func (es EventService) GetByName(name string) (*models.SetEvent, error) {
+	var event models.SetEvent
+	query := "SELECT * FROM events WHERE name = $1"
+	err := es.db.Get(&event, query, name)
+
+	if err != nil {
+		err = fmt.Errorf(
+			"could not select event by name: %s with error %s",
+			name,
+			err.Error(),
+		)
+		return nil, err
+	}
+
+	return &event, nil
+}
+
 // List will list all events that exist in the SoR
 func (es EventService) List() ([]models.SetEvent, error) {
 	var events []models.SetEvent
@@ -81,7 +99,8 @@ func (es EventService) Create(event models.SetEvent) (*models.SetEvent, error) {
 		event.ID = uuid.Must(uuid.NewV4()).String()
 	}
 	event.CreatedOn = null.NewTime(time.Now(), true)
-	query := "INSERT INTO public.events (id, name, properties, created_on) VALUES (:id, :name, :properties, :created_on)"
+	query := `INSERT INTO public.events (id, name, properties, created_on) 
+	VALUES (:id, :name, :properties, :created_on)`
 	_, err := es.db.NamedQuery(query, &event)
 
 	if err != nil {
